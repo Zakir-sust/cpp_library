@@ -1,0 +1,47 @@
+struct Lca{
+    vector<int>lvl;
+    vector<vector<int> >par;
+    int n;
+    Lca(int n)
+    {
+        this->n=n;
+        lvl.resize(n+3,0);
+        par.resize(n+3,vector<int>(22));
+        dfs(1,1,1);
+        build();
+    }
+    void dfs(int node,int pr,int d)
+    {
+        lvl[node]=d;
+        par[node][0]=pr;
+        for(auto v:adj[node]){
+            if(v.ff==pr)continue;
+            dfs(v.ff,node,d+1);
+        }
+    }
+    void build()
+    {
+        for(int i=1;i<20;i++)
+            for(int j=1;j<=n;j++)
+                par[j][i]=par[par[j][i-1]][i-1];
+    }
+    int query(int u,int v)
+    {
+        if(lvl[u]<lvl[v])swap(u,v);
+        int lg=0;
+        while(1){
+            if((1<<lg)>lvl[u])break;
+            lg++;
+        }
+        for(int i=lg;i>=0;i--){
+            if(lvl[u]-(1<<i)>=lvl[v])
+                u=par[u][i];
+        }
+        if(u==v)return u;
+        for(int i=lg;i>=0;i--){
+            if(par[u][i]!=par[v][i])
+                u=par[u][i],v=par[v][i];
+        }
+        return par[u][0];
+    }
+};

@@ -1,0 +1,49 @@
+struct node{
+    node* l,*r;
+    int cnt;
+    node(int x):
+        l(NULL),r(NULL),cnt(x){}
+    node(node *p,node *q,int x){
+        l=p;
+        r=q;
+        cnt=x;
+        if(l)cnt+=l->cnt;
+        if(r)cnt+=r->cnt;
+    }
+};
+node *tr[1000000];
+struct seg_tree{
+    node *build(int st,int ed)
+    {
+        if(st==ed)return new node(0);
+        int m=(st+ed)>>1;
+        return new node(build(st,m),build(m+1,ed),0);
+    }
+    node *insert(node *x,int st,int ed,int val)
+    {
+        if(st==ed)return new node(1+x->cnt);
+        int m=(st+ed)>>1;
+        if(val>=st&&val<=m)
+            return new node(insert(x->l,st,m,val),x->r,0);
+        else return
+            new node(x->l,insert(x->r,m+1,ed,val),0);
+    }
+    int less_than(node *L,node *R,int st,int ed,int k)
+    {
+        if(st==ed)return (R->cnt - L->cnt);
+        int m=(st+ed)>>1;
+        if(k>m)
+            return (R->l->cnt - L->l->cnt+less_than(L->r,R->r,m+1,ed,k));
+        else return less_than(L->l,R->l,st,m,k);
+    }
+    int kth(node *L,node *R,int st,int ed,int k)
+    {
+        if(st==ed)return st;
+        int m=(st+ed)>>1;
+        int tot=R->l->cnt - L->l->cnt;
+        if(k-tot>0)         ///left has less than k number
+            return kth(L->r,R->r,m+1,ed,k-tot);
+        else
+            return kth(L->l,R->l,st,m,k);
+    }
+};

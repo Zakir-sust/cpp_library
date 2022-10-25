@@ -1,0 +1,63 @@
+const int nil=0;
+int dist[N];
+int pu[N],pv[N];
+bool bfs()
+{
+//    cout<<"matchs"<<endl;
+//    for(int i=1;i<=n;i++)cout<<i<<" "<<pu[i]<<endl;
+    queue<int>q;
+    for(int i=1;i<=n;i++){
+        if(pu[i]==nil)
+        {
+            dist[i]=0;
+            q.push(i);
+        }
+        else dist[i]=inf;
+    }
+    dist[nil]=inf;
+    while(!q.empty())
+    {
+        int u=q.front();
+        q.pop();
+//        error(u);
+        if(u!=nil){
+            for(auto v:adj[u]){
+                if(dist[pv[v]]==inf){
+                    dist[pv[v]]=dist[u]+1;
+                    q.push(pv[v]);
+//                    error(v,pv[v]);
+                }
+            }
+        }
+    }
+    return (dist[nil]!=inf);
+}
+bool dfs(int u)
+{
+    if(u==nil)return true;
+    for(auto v:adj[u]){
+        if(dist[pv[v]]==dist[u]+1){
+            if(dfs(pv[v])){
+                pv[v]=u;
+                pu[u]=v;
+                return true;
+            }
+        }
+    }
+    dist[u]=inf;
+    return false;
+}
+int hopcroft()
+{
+    for(int i=0;i<=n;i++)pu[i]=nil;
+    for(int i=0;i<=m;i++)pv[i]=nil;
+    int ans=0;
+    while(bfs())
+        for(int i=1;i<=n;i++)
+        {
+            if(pu[i]==nil&&dfs(i))
+                ans++;
+
+        }
+    return ans;
+}

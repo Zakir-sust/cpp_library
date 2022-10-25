@@ -1,0 +1,29 @@
+int cnt[N];
+vi path;
+vpi adj[N];
+bool removed[N];
+const int sz=N-2;
+bool check()
+{
+    for(int i=1;i<=sz;i++)
+        if(cnt[i]%2==1)
+            return 0;
+    return 1;
+}
+
+void euler(int nd)
+{
+    while(adj[nd].size()>0){
+        pi v=adj[nd].back();
+        if(removed[v.ss]==0)
+        {
+            removed[v.ss]=1;
+            adj[nd].pop_back();
+            euler(v.ff);
+        }
+        else{
+            adj[nd].pop_back();
+        }
+    }
+    path.pb(nd);
+}

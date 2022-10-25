@@ -1,0 +1,20 @@
+ll hsh[4][N];
+ll pw[N];
+ll p=31;
+void compute_hash(string const& s,int k)
+{
+    ll cur=0;
+    for(int i=0;i<s.length();i++)
+    {
+        cur=(cur+(s[i]-'a'+1)*pw[i])%mod;
+        hsh[k][i+1]=cur;
+    }
+}
+bool check(int l1,int r1,int l2,int r2)
+{
+    ll h1=((hsh[0][r1+1]-hsh[0][l1]+mod)*pw[l2])%mod;
+    ll h2=((hsh[1][r2+1]-hsh[1][l2]+mod)*pw[l1])%mod;
+//    error(h1,h2);
+    if(h1==h2)return 1;
+    return 0;
+}

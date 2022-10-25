@@ -1,0 +1,15 @@
+vi lis;
+void add(int val)
+{
+    int pos=lower_bound(all(lis),val)-lis.begin();
+    if(pos==lis.size())
+        lis.pb(val);
+    else
+        lis[pos]=val;
+}
+int get_lis(vi v)
+{
+    for(auto x:v)
+        add(x);
+    return lis.size();
+}

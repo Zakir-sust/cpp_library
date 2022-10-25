@@ -1,0 +1,97 @@
+struct node{
+    node* l,*r;
+    int cnt;
+    node(int x):
+        l(NULL),r(NULL),cnt(x){}
+    node(node *p,node *q,int x){
+        l=p;
+        r=q;
+        cnt=x;
+        if(l)cnt+=l->cnt;
+        if(r)cnt+=r->cnt;
+    }
+};
+
+int bit=19;
+struct trie{
+    node *build(int d)
+    {
+        if(d<0)return new node(0);
+        return new node(build(d-1),build(d-1));
+    }
+    node *insert(node *cur,int num,int d){
+        if(d<0)return new node(1+cur->cnt);
+        if(num&(1<<d))
+            return new node(cur->l,insert(cur->r,num,d-1));
+        else return new node(insert(cur->l,num,d-1),cur->r);
+    }
+    int max_xor(node *L,node *R,int num)
+    {
+        int ans=0;
+        for(int d=bit;d>=0;d--)
+        {
+            if(num&(1<<d)){
+                if(R->l->cnt - L->l->cnt>0){
+                    R=R->l;
+                    L=L->l;
+                    ans+=(1<<d);
+                }
+                else
+                {
+                    R=R->r;
+                    L=L->r;
+                }
+            }
+            else
+            {
+                if(R->r->cnt - L->r->cnt>0){
+                    R=R->r;
+                    L=L->r;
+                    ans+=(1<<d);
+                }
+                else
+                {
+                    R=R->l;
+                    L=L->l;
+                }
+            }
+        }
+        return ans;
+    }
+    int less_than(node *L,node *R,int k)
+    {
+        int tot=0;
+        for(int d=bit;d>=0;d--)
+        {
+            if(k&(1<<d)){
+                tot+=R->l->cnt - L->l->cnt;
+                L=L->r;
+                R=R->r;
+            }
+            else{
+                L=L->l;
+                R=R->l;
+            }
+        }
+        return tot;
+    }
+    int kth(node *L,node *R,int k)
+    {
+        int ans=0;
+        for(int d=bit;d>=0;d--)
+        {
+            if(k> R->l->cnt - L->l->cnt){
+                k-=(R->l->cnt - L->l->cnt);
+                R=R->r;
+                L=L->r;
+                ans+=(1<<d);
+            }
+            else
+            {
+                L=L->l;
+                R=R->l;
+            }
+        }
+        return ans;
+    }
+};

@@ -1,0 +1,62 @@
+int tr[4000000][5];
+int bit=31;
+struct trie{
+    int cnt=1;
+    int n;
+
+    void insert(int num)
+    {
+        int cur=1;
+        for(int i=bit;i>=0;i--)
+        {
+            tr[cur][2]++;
+            int bit=(num&(1<<i))?1:0;
+            if(!tr[cur][bit])
+                tr[cur][bit]=++cnt;
+            cur=tr[cur][bit];
+        }
+        tr[cur][2]++;
+    }
+
+    ///calculates no of elements with XOR less than k
+    ll query(int x,int k)
+    {
+        int cur=1;
+        ll res=0;
+        for(int i=bit;i>=0;i--)
+        {
+            int p=(x&(1<<i));
+            if(p>0)p=1;
+            int q=(k&(1<<i));
+            if(q>0)q=1;
+            if(q){
+                res+=tr[tr[cur][p]][2];
+                if(!tr[cur][1-p])return res;
+                cur=tr[cur][1-p];
+            }
+            else
+            {
+                if(!tr[cur][p])return res;
+                cur=tr[cur][p];
+            }
+        }
+        return res;
+    }
+    ///returns max_xor of num with all available numbers
+    int max_xor(int num)
+    {
+        int res=0;
+        int cur=1;
+        for(int d=bit;d>=0;d--)
+        {
+            int k=(num&(1<<d))?1:0;
+            if(tr[cur][1-k])
+            {
+                res+=(1<<d);
+                cur=tr[cur][1-k];
+            }
+            else cur=tr[cur][k];
+        }
+        return res;
+    }
+};

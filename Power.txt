@@ -1,0 +1,12 @@
+ll power(ll a,ll p)
+{
+    ll res=1;
+    ll y=a;
+    while(p)
+    {
+        if(p&1)res=(res*y)%mod;
+        y>>=1;
+        y=(y*y)%mod;
+    }
+    return res;
+}

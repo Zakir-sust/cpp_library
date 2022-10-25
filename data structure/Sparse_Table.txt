@@ -1,0 +1,23 @@
+
+
+int lg[N];
+int tab[34][N];
+void build(int n)
+{
+    lg[1]=0;
+    for(int i=2;i<N;i++)
+        lg[i]=lg[(i>>1)]+1;
+
+    int mx=lg[n];
+    for(int k=1;k<=mx;k++)
+    {
+        for(int i=0;(i+(1<<k)-1)<n;i++)
+            tab[k][i]=max(tab[k-1][i],tab[k-1][i+(1<<(k-1))]);
+    }
+}
+inline int query(int l,int r)
+{
+    if(r<l)swap(l,r);
+    int d=lg[r-l+1];
+    return max(tab[d][l],tab[d][r-(1<<d)+1]);
+}

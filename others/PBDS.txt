@@ -1,0 +1,4 @@
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+typedef tree<pi,null_type,less<pi>,rb_tree_tag,tree_order_statistics_node_update>set_t;

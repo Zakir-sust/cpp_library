@@ -1,0 +1,41 @@
+struct Matrix
+{
+    vector<vector<int> >mat;
+    int rows,cols;
+    Matrix(vector<vector<int> >val):mat(val),rows(val.size()),cols(val[0].size()){}
+    ///multiply two matrice
+    Matrix operator *(const Matrix &other)
+    {
+        int n=rows,m=other.cols;
+        vector<vector<int> >res(n,vector<int>(m,0));
+        for(int i=0;i<n;i++)
+            for(int j=0;j<m;j++)
+                for(int k=0;k<cols;k++)
+                    res[i][j]=(res[i][j]+mat[i][k]*1ll*other.mat[k][j])%mod;
+        return Matrix(res);
+    }
+    ///raise matrix to power p
+    Matrix power(int p)
+    {
+        Matrix res(vector<vector<int> >(rows,vector<int>(cols,0)));
+        Matrix temp=*this;
+        for(int i=0;i<rows;i++)
+            res.mat[i][i]=1;
+        while(p)
+        {
+            if(p&1)res=res*temp;
+            temp=temp*temp;
+            p>>=1;
+        }
+        return res;
+    }
+    void print()
+    {
+        for(int i=0;i<rows;i++)
+            for(int j=0;j<cols;j++){
+                cout<<mat[i][j];
+                if(j==cols-1)cout<<endl;
+                else cout<<" ";
+            }
+    }
+};

@@ -1,0 +1,44 @@
+int sz[N],par[N];
+set<int>cd[N];
+unordered_map<int,int>dis[N];
+int dfs(int nd,int p)
+{
+    sz[nd]=1;
+    for(int to:cd[nd]){
+        if(to==p)continue;
+        sz[nd]+=dfs(to,nd);
+    }
+    return sz[nd];
+}
+int centroid(int nd,int p,int tot)
+{
+
+    for(int to:cd[nd]){
+     if(to==p)continue;
+     if(sz[to]>tot/2)return centroid(to,nd,tot);
+    }
+    return nd;
+}
+void dfs2(int nd,int p,int c,int d)
+{
+    dis[c][nd]=d;
+    for(int to:cd[nd]){
+        if(to==p)continue;
+        dfs2(to,nd,c,d+1);
+    }
+}
+void build(int nd,int p)
+{
+    int tot=dfs(nd,p);
+    int c=centroid(nd,p,tot);
+    if(p==-1)p=c;
+    par[c]=p;
+    dfs2(c,c,c,0);
+    vi v(cd[c].begin(),cd[c].end());
+    for(auto to:v){
+        cd[to].erase(c);
+        cd[c].erase(to);
+        build(to,c);
+    }   
+}
+

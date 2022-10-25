@@ -1,0 +1,52 @@
+1) get the name of the arguments passed:
+#define px(x)   cerr<<#x<<" is "<<x<<endl;
+
+2) sort with comparetor passed
+    sort(all(v),[](pi p,pi q){if(p.ss==q.ss)return p.ff>q.ff;return p.ss<q.ss;});
+
+3) sum any number of elements (must be of same data type)
+    template <class T>T sum(T t){return t;}
+    template <class T,class... abc>T sum(T a,abc... args){return a+sum(args...);}
+
+
+4) 
+1) print any number of arguments:	
+    template <class T>void dbg(T a){cout<<a<<endl;}
+    template <class H,class... T>void dbg(H h,T... t){cout<<h<<' ';dbg(t...);}
+2) print with argument name:
+    #define error(args...){string _s=#args;replace(_s.begin(),_s.end(),',',' ');stringstream _ss(_s);istream_iterator<string> _it(_ss);err(_it,args);}
+    void err(istream_iterator<string>it){cout<<endl;}
+    template<class H,class... T>void err(istream_iterator<string>it,H a,T... t){cerr<<*it<<" = "<<a<<" ,";err(++it,t...);}
+
+5)
+1) prints a vector
+     template<class T>auto&operator<<(ostream& os,vector<T>_v){bool a=1;for(auto x:_v){os<<(a?"":" ")<<x;a=0;}return os;}
+
+2) prints a pair
+     template<class S,class T>ostream&operator<<(ostream&os,pair<S,T>p){os<<"["<<p.first<<", "<<p.second<<"]";return os;};
+
+----------------------
+stl:
+#1)priority queue custom
+class comp{
+    public:
+        bool operator()(const pip& p,const pip& q)
+        {
+            if(p.ff==q.ff){
+                return p.ss.ff>q.ss.ff;
+            }
+            return p.ff<q.ff;
+        }
+};
+int main()
+{
+    priority_queue<pip,vector<pip>,comp>pq;
+}
+
+2):tuple
+    tuple<int,int,int>tp=make_tuple(2,5,3);
+    cout<<get<1>(tp)<<endl;
+    auto [a1,a2,a3]=tp;
+    int a,b,c;
+    tie(a,b,c)=tp;
+    

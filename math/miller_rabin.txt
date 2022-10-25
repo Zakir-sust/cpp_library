@@ -1,0 +1,44 @@
+ll power(ll a,ll p,ll m)
+{
+    u128 z=1;
+    ll r=1,y=a;;
+    a=(a%p);
+    while(p>0){
+        if(p&1)r=z*r*y%m;
+        y=z*y*y%m;
+        p>>=1;
+    }
+    return r;
+}
+int temp[]={2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37};
+
+bool miller_test(ll n,ll a,ll d,ll r)
+{
+    ll x=power(a,d,n);
+    if(x==1||x==n-1)return true;
+    while(r>0){
+        x=(u128)x*x%n;
+        if(x==1)return false;
+        if(x==n-1)return true;
+        r--;
+    }
+    return false;
+}
+bool isprime(ll n)
+{
+    if(n<2)return false;
+    if(n==2||n==3)return true;
+    int k=12;
+    ll d=n-1;
+    int r=0;
+    while(d%2==0){
+        d/=2;
+        r++;
+    }
+
+    for(int k=0;k<12;k++){
+        if(temp[k]>=n)return true;
+        if(!miller_test(n,temp[k],d,r))return false;
+    }
+    return true;
+}

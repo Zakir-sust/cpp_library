@@ -1,0 +1,83 @@
+string s,pat;
+struct suffix_array{
+    int n;
+    vector<int>sa,ra,lcp;
+    suffix_array():n(s.length()),sa(n),ra(n),lcp(n){}
+    inline int add(int a,int b){return (a+b<n)?a+b:a+b-n;}
+    inline int sub(int a,int b){return (a-b<0)?a-b+n:a-b;}
+    void count_sort()
+    {
+        vector<int>cnt(n,0),pos(n),temp_sa(n);
+        for(int i=0;i<n;i++)
+            cnt[ra[i]]++;
+        for(int i=1;i<n;i++)
+            pos[i]=pos[i-1]+cnt[i-1];
+        for(auto x:sa)
+        {
+            temp_sa[pos[ra[x]]]=x;
+            pos[ra[x]]++;
+        }
+        sa=temp_sa;
+    }
+    void build_sa()
+    {
+        vector<pair<char,int> >a(n);
+        for(int i=0;i<n;i++)a[i]={s[i],i};
+        sort(all(a));
+        for(int i=0;i<n;i++)sa[i]=a[i].ss;
+        ra[sa[0]]=0;
+        for(int i=1;i<n;i++)
+            ra[sa[i]]=(a[i].ff==a[i-1].ff)?ra[sa[i-1]]:ra[sa[i-1]]+1;
+
+        for(int k=0;(1<<k)<n;k++)
+        {
+            for(int i=0;i<n;i++)sa[i]=sub(sa[i],1<<k);
+            count_sort();
+            vector<int>temp_ra(n);
+            temp_ra[sa[0]]=0;
+            for(int i=1;i<n;i++)
+            {
+                pi now(ra[sa[i]],ra[add(sa[i],1<<k)]);
+                pi prev(ra[sa[i-1]],ra[add(sa[i-1],1<<k)]);
+                temp_ra[sa[i]]=(now==prev)?temp_ra[sa[i-1]]:temp_ra[sa[i-1]]+1;
+            }
+            ra=temp_ra;
+        }
+    }
+    void build_lcp()
+    {
+        int k=0;
+        for(int i=0;i<n-1;i++)
+        {
+            int j=sa[ra[i]-1];
+            while(s[i+k]==s[j+k])k++;
+            lcp[i]=k;
+            k=max(k-1,0);
+        }
+    }
+    int low()
+    {
+        int k=pat.length();
+        int l=0,r=n-1;
+        while(l<=r)
+        {
+            int mid=(l+r)>>1;
+            if(s.substr(sa[mid],k)<pat)l=mid+1;
+            else r=mid-1;
+        }
+        return r;
+    }
+    int high()
+    {
+        int k=pat.length();
+        int l=0,r=n-1;
+        while(l<=r)
+        {
+            int mid=(l+r)>>1;
+            if(s.substr(sa[mid],k)<=pat)
+                l=mid+1;
+            else r=mid-1;
+        }
+        return l;
+    }
+};
