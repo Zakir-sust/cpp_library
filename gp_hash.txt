@@ -39,6 +39,10 @@ struct custom_hash {
 gp_hash_table<int,int,chash>st;
 
 
+////////////////hash 4
+https://github.com/kth-competitive-programming/kactl/blob/main/content/data-structures/HashMap.h
+
+
 ///for pair
 struct chash {
     int operator()(pii x) const { return x.first* 31 + x.second; }
