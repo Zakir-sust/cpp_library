@@ -44,4 +44,17 @@ struct Lca{
         }
         return par[u][0];
     }
+    int kth_parent(int u,int k)
+    {
+        if(k==0)return u;
+        int lg = 0;
+        while(1){
+            if((1<<lg)>=k)break;
+            lg++;
+        }
+        for(int i=lg;i>=0;i--){
+            if((1<<i)&k)u=par[u][i];
+        }
+        return u;
+    }
 };
