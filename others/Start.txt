@@ -30,7 +30,7 @@ typedef pair<int,pi>pip;
 typedef vector<int>vi;
 typedef vector<pi>vpi;
 const int mod=1e9+7;
-ll power(ll a,ll p){ll r=1,y=a;while(p){if(p&1)r=(1LL*r*y)%mod;p>>=1;y=(1LL*y*y)%mod;}return r;}
+ll power(ll a,ll p){ll r=1,y=a%mod;while(p){if(p&1)r=(1LL*r*y)%mod;p>>=1;y=(1LL*y*y)%mod;}return r;}
 
 const int N=2100000;
 int ara[N];
