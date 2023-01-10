@@ -14,7 +14,7 @@
 }
 
 
-/// lab pc ubuntu
+/// lab pc windows
 {
 	"shell_cmd": "g++ \"${file}\" -o \"${file_path}/${file_base_name}\"",
 	"path": "C:\\Program Files\\CodeBlocks\\MinGW\\bin;%PATH%",
