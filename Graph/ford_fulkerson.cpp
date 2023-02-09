@@ -1,5 +1,7 @@
-const int N = 105;
-int cost[N][N],par[N];
+const int N=105;
+int ara[N];
+int capacity[N][N];
+int par[N];
 vi adj[N];
 bool vis[N];
 int bfs(int st,int ed)
@@ -15,7 +17,7 @@ int bfs(int st,int ed)
 		if(top == ed)
 			return 1;
 		for(auto to:adj[top]){
-			if(vis[to] == 0 && cost[top][to] ){
+			if(vis[to] == 0 && capacity[top][to] ){
 				q.push(to);
 				par[to] = top;
 				vis[to] = 1;
@@ -28,15 +30,15 @@ int ford_fulkerson(int st,int ed)
 {
 	int ans = 0;
 	while(bfs(st,ed)){
-		int u = ed,w=inf;c
+		int u = ed,w=inf;
 		while(par[u] != -1){
-			w = min(w,cost[par[u]][u]);
+			w = min(w,capacity[par[u]][u]);
 			u = par[u];
 		}
 		u = ed;
 		while(par[u] != -1){
-			cost[par[u]][u] -= w;
-			cost[u][par[u]] += w;
+			capacity[par[u]][u] -= w;
+			capacity[u][par[u]] += w;
 			u = par[u];
 		}
 		ans += w;
