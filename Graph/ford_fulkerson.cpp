@@ -1,9 +1,17 @@
 const int N=105;
-int ara[N];
+int a[N],b[N],c[N];
 int capacity[N][N];
 int par[N];
 vi adj[N];
 bool vis[N];
+struct edge{
+	int u, v, capacity, cost;
+	edge(){}
+	edge(int _u,int _v,int _capacity,int _cost = 0){
+		u=_u,v=_v,capacity=_capacity,cost=_cost;
+	}
+};
+
 int bfs(int st,int ed)
 {
 	queue<int>q;
@@ -26,8 +34,16 @@ int bfs(int st,int ed)
 	}
 	return 0;
 }
-int ford_fulkerson(int st,int ed)
+
+int ford_fulkerson(int st,int ed,vector<edge>&edges)
 {
+	for(auto e:edges)
+	{
+		adj[e.u].pb(e.v);
+		adj[e.v].pb(e.u);
+		capacity[e.u][e.v] = e.capacity;
+		// capacity[e.v][e.u] = e.capacity;
+	}
 	int ans = 0;
 	while(bfs(st,ed)){
 		int u = ed,w=inf;
@@ -43,5 +59,7 @@ int ford_fulkerson(int st,int ed)
 		}
 		ans += w;
 	}
+	for(int i=0;i<N;i++)
+		adj[i].clear();
 	return ans;
 }
